@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Movie Catalogue</string>
+    <string name="item_description">item description</string>
+    <string name="grade">grade</string>
+    <string name="item_title">item title</string>
+    <string name="poster">poster</string>
+    <string name="movie_title">Movies</string>
+    <string name="tv_show_title">TV Shows</string>
+    <string name="movie_poster">movie poster</string>
+    <string name="backdrop_image">backdrop image</string>
+    <string name="description">Description</string>
+    <string name="tv_show_poster">tv show poster</string>
+    <string name="tv_show_name">Tv Show name</string>
+    <string name="no_favorite_tvShow">No Favorite Tv Show</string>
+    <string name="no_favorite_movie">No Favorite Movie</string>
+    <string name="favorite_icon">favorite icon</string>
+    <string name="favorite">Favorite</string>
+
+</resources>
