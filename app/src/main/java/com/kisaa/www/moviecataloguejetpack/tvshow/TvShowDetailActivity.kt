@@ -5,14 +5,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
 import com.kisaa.www.moviecataloguejetpack.R
-import com.kisaa.www.moviecataloguejetpack.data.source.local.FavoriteEntity
-import com.kisaa.www.moviecataloguejetpack.data.source.remote.TvShowEntity
-import com.kisaa.www.moviecataloguejetpack.utils.*
+import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
+import com.kisaa.www.moviecataloguejetpack.core.domain.model.TvShow
+import com.kisaa.www.moviecataloguejetpack.core.utils.*
 import kotlinx.android.synthetic.main.activity_tv_show_detail.*
-import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
@@ -21,10 +19,10 @@ class TvShowDetailActivity : AppCompatActivity() {
     private val viewModel by viewModel<TvShowDetailViewModel>()
     private var isFavorite: Boolean = false
     private var menuItem: Menu? = null
-    private lateinit var favorite: FavoriteEntity
+    private lateinit var favorite: Favorite
 
     companion object {
-        const val EXTRA_ID = "extra_id"
+        const val EXTRA_DATA = "extra_data"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,19 +30,19 @@ class TvShowDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tv_show_detail)
         setSupportActionBar(toolbar)
 
-        val tvShowId = intent.getStringExtra(EXTRA_ID)
+        val tvShow = intent.getParcelableExtra<TvShow>(EXTRA_DATA)
 
-        EspressoIdlingResource.increment()
         detail_progress_bar.visible()
-        viewModel.checkFavoriteById(tvShowId!!).observe(this, Observer {
-            isFavorite = it != null
-        })
-        viewModel.getTvShowDetail(tvShowId).observe(this, Observer {
+        tvShow?.let {
+            viewModel.checkFavoriteById(tvShow.id).observe(this, {
+                isFavorite = it != null
+            })
+
             populateView(it)
-            tvShowToFavoriteEntity(it)
+            tvShowToFavorite(it)
             detail_progress_bar.invisible()
-            EspressoIdlingResource.decrement()
-        })
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -52,7 +50,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    private fun populateView(tvShow: TvShowEntity) {
+    private fun populateView(tvShow: TvShow) {
         tv_tvshow_title.text = tvShow.name
         tv_tvshow_overview.text = tvShow.overview
         grade_tv_show.text = tvShow.vote_average
@@ -103,13 +101,14 @@ class TvShowDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun tvShowToFavoriteEntity(tvShow: TvShowEntity) {
-        favorite = FavoriteEntity(
-            tvShow.id!!,
+    private fun tvShowToFavorite(tvShow: TvShow) {
+        favorite = Favorite(
+            tvShow.id,
             tvShow.name,
             tvShow.overview,
             tvShow.vote_average,
             tvShow.poster_path,
+            tvShow.backdrop_path,
             "tvShow"
         )
     }

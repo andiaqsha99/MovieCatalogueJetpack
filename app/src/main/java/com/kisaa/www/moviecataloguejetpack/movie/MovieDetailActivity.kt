@@ -5,14 +5,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
 import com.kisaa.www.moviecataloguejetpack.R
-import com.kisaa.www.moviecataloguejetpack.data.source.local.FavoriteEntity
-import com.kisaa.www.moviecataloguejetpack.data.source.remote.MovieEntity
-import com.kisaa.www.moviecataloguejetpack.utils.*
+import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
+import com.kisaa.www.moviecataloguejetpack.core.domain.model.Movie
+import com.kisaa.www.moviecataloguejetpack.core.utils.*
 import kotlinx.android.synthetic.main.activity_movie_detail.*
-import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
@@ -21,10 +19,10 @@ class MovieDetailActivity : AppCompatActivity() {
     private val viewModel by viewModel<MovieDetailViewModel>()
     private var isFavorite: Boolean = false
     private var menuItem: Menu? = null
-    private lateinit var favorite: FavoriteEntity
+    private lateinit var favorite: Favorite
 
     companion object {
-        const val EXTRA_ID = "extra_id"
+        const val EXTRA_DATA = "extra_data"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,20 +30,18 @@ class MovieDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_movie_detail)
         setSupportActionBar(toolbar)
 
-        val movieId = intent.getStringExtra(EXTRA_ID)
+        val movie = intent.getParcelableExtra<Movie>(EXTRA_DATA)
 
-        EspressoIdlingResource.increment()
         detail_progress_bar.visible()
-        viewModel.checkFavoriteById(movieId!!).observe(this, Observer {
-            isFavorite = it != null
-        })
-        viewModel.getDetailMovie(movieId).observe(this, Observer {
-            populateView(it)
-            movieToFavoriteEntity(it)
-            detail_progress_bar.invisible()
-            EspressoIdlingResource.decrement()
-        })
+        movie?.let {
+            viewModel.checkFavoriteById(movie.id).observe(this, {
+                isFavorite = it != null
+            })
 
+            populateView(movie)
+            movieToFavorite(movie)
+            detail_progress_bar.invisible()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -53,7 +49,7 @@ class MovieDetailActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    private fun populateView(movie: MovieEntity) {
+    private fun populateView(movie: Movie) {
         tv_movie_title.text = movie.title
         tv_movie_overview.text = movie.overview
         grade_movie.text = movie.vote_average
@@ -104,13 +100,14 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun movieToFavoriteEntity(movie: MovieEntity) {
-        favorite = FavoriteEntity(
-            movie.id!!,
+    private fun movieToFavorite(movie: Movie) {
+        favorite = Favorite(
+            movie.id,
             movie.title,
             movie.overview,
             movie.vote_average,
             movie.poster_path,
+            movie.backdrop_path,
             "movie"
         )
     }

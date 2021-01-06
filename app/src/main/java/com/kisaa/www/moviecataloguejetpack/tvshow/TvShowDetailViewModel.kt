@@ -2,33 +2,20 @@ package com.kisaa.www.moviecataloguejetpack.tvshow
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.kisaa.www.moviecataloguejetpack.data.MovieRepository
-import com.kisaa.www.moviecataloguejetpack.data.source.local.FavoriteEntity
-import com.kisaa.www.moviecataloguejetpack.data.source.remote.TvShowEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.lifecycle.asLiveData
+import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
+import com.kisaa.www.moviecataloguejetpack.core.domain.usecase.MovieUseCase
 
-class TvShowDetailViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class TvShowDetailViewModel(private val movieUseCase: MovieUseCase) : ViewModel() {
 
-    private lateinit var dataTvShow: LiveData<TvShowEntity>
-    private lateinit var favTvShow: LiveData<FavoriteEntity>
+    private lateinit var favTvShow: LiveData<Favorite?>
 
-    fun getTvShowDetail(tvShowId: String?): LiveData<TvShowEntity> {
-        dataTvShow = movieRepository.getDetailTvShow(tvShowId)
-        return dataTvShow
-    }
+    fun insertToFavorite(favorite: Favorite) = movieUseCase.addToFavorite(favorite)
 
-    fun insertToFavorite(favorite: FavoriteEntity) = viewModelScope.launch(Dispatchers.IO) {
-        movieRepository.insertToFavorite(favorite)
-    }
+    fun deleteFromFavorite(favorite: Favorite) = movieUseCase.deleteFromFavorite(favorite)
 
-    fun deleteFromFavorite(favorite: FavoriteEntity) = viewModelScope.launch(Dispatchers.IO) {
-        movieRepository.deleteFromFavorite(favorite)
-    }
-
-    fun checkFavoriteById(id: String): LiveData<FavoriteEntity> {
-        favTvShow = movieRepository.checkFavoriteById(id)
+    fun checkFavoriteById(id: String): LiveData<Favorite?> {
+        favTvShow = movieUseCase.checkFavoriteById(id).asLiveData()
         return favTvShow
     }
 }

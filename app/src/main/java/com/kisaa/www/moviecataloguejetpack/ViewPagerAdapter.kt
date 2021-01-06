@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.kisaa.www.moviecataloguejetpack.core.R
 import com.kisaa.www.moviecataloguejetpack.movie.MovieFragment
 import com.kisaa.www.moviecataloguejetpack.tvshow.TvShowFragment
 
@@ -24,7 +25,7 @@ class ViewPagerAdapter(private val mContext: Context, fm: FragmentManager) :
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return mContext.resources.getString(TAB_TITLES[position])
     }
 

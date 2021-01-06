@@ -2,35 +2,22 @@ package com.kisaa.www.moviecataloguejetpack.movie
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.kisaa.www.moviecataloguejetpack.data.MovieRepository
-import com.kisaa.www.moviecataloguejetpack.data.source.local.FavoriteEntity
-import com.kisaa.www.moviecataloguejetpack.data.source.remote.MovieEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.lifecycle.asLiveData
+import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
+import com.kisaa.www.moviecataloguejetpack.core.domain.usecase.MovieUseCase
 
-class MovieDetailViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class MovieDetailViewModel(private val movieUseCase: MovieUseCase) : ViewModel() {
 
-    private lateinit var dataMovie: LiveData<MovieEntity>
-    private lateinit var favMovie: LiveData<FavoriteEntity>
+    private lateinit var favMovie: LiveData<Favorite?>
 
-    fun getDetailMovie(movieId: String?): LiveData<MovieEntity> {
-        dataMovie = movieRepository.getDetailMovie(movieId)
-        return dataMovie
-    }
+    fun insertToFavorite(favorite: Favorite) =
+        movieUseCase.addToFavorite(favorite)
 
-    fun insertToFavorite(favorite: FavoriteEntity) =
-        viewModelScope.launch(Dispatchers.IO) {
-            movieRepository.insertToFavorite(favorite)
-        }
+    fun deleteFromFavorite(favorite: Favorite) =
+        movieUseCase.deleteFromFavorite(favorite)
 
-    fun deleteFromFavorite(favorite: FavoriteEntity) =
-        viewModelScope.launch(Dispatchers.IO) {
-            movieRepository.deleteFromFavorite(favorite)
-        }
-
-    fun checkFavoriteById(id: String): LiveData<FavoriteEntity> {
-        favMovie = movieRepository.checkFavoriteById(id)
+    fun checkFavoriteById(id: String): LiveData<Favorite?> {
+        favMovie = movieUseCase.checkFavoriteById(id).asLiveData()
         return favMovie
     }
 }
