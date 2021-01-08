@@ -13,16 +13,16 @@ data class FavoriteEntity(
     val title: String,
 
     @ColumnInfo(name = "overview")
-    val overview: String,
+    val overview: String?,
 
     @ColumnInfo(name = "vote_average")
-    val voteAverage: String,
+    val voteAverage: String?,
 
     @ColumnInfo(name = "poster_path")
-    val posterPath: String,
+    val posterPath: String?,
 
     @ColumnInfo(name = "backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
 
     @ColumnInfo(name = "category")
     val category: String

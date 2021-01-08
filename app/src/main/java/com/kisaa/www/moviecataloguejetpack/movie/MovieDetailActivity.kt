@@ -34,8 +34,8 @@ class MovieDetailActivity : AppCompatActivity() {
 
         detail_progress_bar.visible()
         movie?.let {
-            viewModel.checkFavoriteById(movie.id).observe(this, {
-                isFavorite = it != null
+            viewModel.checkFavoriteById(movie.id).observe(this, { data ->
+                isFavorite = data != null
             })
 
             populateView(movie)

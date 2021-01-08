@@ -34,8 +34,8 @@ class TvShowDetailActivity : AppCompatActivity() {
 
         detail_progress_bar.visible()
         tvShow?.let {
-            viewModel.checkFavoriteById(tvShow.id).observe(this, {
-                isFavorite = it != null
+            viewModel.checkFavoriteById(tvShow.id).observe(this, { data ->
+                isFavorite = data != null
             })
 
             populateView(it)

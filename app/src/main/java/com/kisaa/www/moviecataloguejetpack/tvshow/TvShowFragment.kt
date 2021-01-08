@@ -46,6 +46,8 @@ class TvShowFragment : Fragment() {
                         tvShowAdapter.setData(it.data)
                         hideLoading()
                     }
+                    is Resource.Error -> {
+                    }
                 }
             }
 
