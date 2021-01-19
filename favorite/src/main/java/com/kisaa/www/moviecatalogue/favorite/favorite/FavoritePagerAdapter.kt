@@ -17,8 +17,8 @@ class FavoritePagerAdapter(private val mContext: Context, fm: FragmentManager) :
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> FavoriteMovieFragment()
-            1 -> FavoriteTvShowFragment()
+            0 -> FavoriteListFragment.newInstance("movie")
+            1 -> FavoriteListFragment.newInstance("tvshow")
             else -> Fragment()
         }
     }

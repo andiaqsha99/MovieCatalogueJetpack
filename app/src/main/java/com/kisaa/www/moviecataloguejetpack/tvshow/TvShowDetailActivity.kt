@@ -10,7 +10,7 @@ import com.kisaa.www.moviecataloguejetpack.R
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.TvShow
 import com.kisaa.www.moviecataloguejetpack.core.utils.*
-import kotlinx.android.synthetic.main.activity_tv_show_detail.*
+import com.kisaa.www.moviecataloguejetpack.databinding.ActivityTvShowDetailBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
@@ -20,6 +20,7 @@ class TvShowDetailActivity : AppCompatActivity() {
     private var isFavorite: Boolean = false
     private var menuItem: Menu? = null
     private lateinit var favorite: Favorite
+    private lateinit var binding: ActivityTvShowDetailBinding
 
     companion object {
         const val EXTRA_DATA = "extra_data"
@@ -27,12 +28,13 @@ class TvShowDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tv_show_detail)
-        setSupportActionBar(toolbar)
+        binding = ActivityTvShowDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         val tvShow = intent.getParcelableExtra<TvShow>(EXTRA_DATA)
 
-        detail_progress_bar.visible()
+        binding.detailProgressBar.visible()
         tvShow?.let {
             viewModel.checkFavoriteById(tvShow.id).observe(this, { data ->
                 isFavorite = data != null
@@ -40,7 +42,7 @@ class TvShowDetailActivity : AppCompatActivity() {
 
             populateView(it)
             tvShowToFavorite(it)
-            detail_progress_bar.invisible()
+            binding.detailProgressBar.invisible()
         }
 
     }
@@ -51,13 +53,13 @@ class TvShowDetailActivity : AppCompatActivity() {
     }
 
     private fun populateView(tvShow: TvShow) {
-        tv_tvshow_title.text = tvShow.name
-        tv_tvshow_overview.text = tvShow.overview
-        grade_tv_show.text = tvShow.vote_average
-        img_tvshow.loadPoster(tvShow.poster_path)
-        img_backdrop.loadBackdrop(tvShow.backdrop_path)
+        binding.tvTvshowTitle.text = tvShow.name
+        binding.tvTvshowOverview.text = tvShow.overview
+        binding.gradeTvShow.text = tvShow.vote_average
+        binding.imgTvshow.loadPoster(tvShow.poster_path)
+        binding.imgBackdrop.loadBackdrop(tvShow.backdrop_path)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        binding.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             title = if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 tvShow.name
             } else {

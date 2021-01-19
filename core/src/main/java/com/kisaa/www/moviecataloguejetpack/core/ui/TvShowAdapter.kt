@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kisaa.www.moviecataloguejetpack.core.R
+import com.kisaa.www.moviecataloguejetpack.core.databinding.ItemListBinding
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.TvShow
 import com.kisaa.www.moviecataloguejetpack.core.utils.loadPoster
-import kotlinx.android.synthetic.main.item_list.view.*
 
 class TvShowAdapter :
     RecyclerView.Adapter<TvShowAdapter.TvViewHolder>() {
@@ -35,13 +35,14 @@ class TvShowAdapter :
     }
 
     inner class TvViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = ItemListBinding.bind(itemView)
         fun bindItem(tvShow: TvShow) {
-            with(itemView) {
-                txt_title.text = tvShow.name
-                txt_description.text = tvShow.overview
-                txt_grade.text = tvShow.vote_average
-                img_photo.loadPoster(tvShow.poster_path)
-                setOnClickListener {
+            with(binding) {
+                txtTitle.text = tvShow.name
+                txtDescription.text = tvShow.overview
+                txtGrade.text = tvShow.vote_average
+                imgPhoto.loadPoster(tvShow.poster_path)
+                root.setOnClickListener {
                     onItemClick?.invoke(tvShows[adapterPosition])
                 }
             }

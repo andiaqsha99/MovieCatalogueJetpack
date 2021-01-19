@@ -10,7 +10,7 @@ import com.kisaa.www.moviecataloguejetpack.R
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.Movie
 import com.kisaa.www.moviecataloguejetpack.core.utils.*
-import kotlinx.android.synthetic.main.activity_movie_detail.*
+import com.kisaa.www.moviecataloguejetpack.databinding.ActivityMovieDetailBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
@@ -20,6 +20,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private var isFavorite: Boolean = false
     private var menuItem: Menu? = null
     private lateinit var favorite: Favorite
+    private lateinit var binding: ActivityMovieDetailBinding
 
     companion object {
         const val EXTRA_DATA = "extra_data"
@@ -27,12 +28,13 @@ class MovieDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_detail)
-        setSupportActionBar(toolbar)
+        binding = ActivityMovieDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         val movie = intent.getParcelableExtra<Movie>(EXTRA_DATA)
 
-        detail_progress_bar.visible()
+        binding.detailProgressBar.visible()
         movie?.let {
             viewModel.checkFavoriteById(movie.id).observe(this, { data ->
                 isFavorite = data != null
@@ -40,7 +42,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
             populateView(movie)
             movieToFavorite(movie)
-            detail_progress_bar.invisible()
+            binding.detailProgressBar.invisible()
         }
     }
 
@@ -50,13 +52,13 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun populateView(movie: Movie) {
-        tv_movie_title.text = movie.title
-        tv_movie_overview.text = movie.overview
-        grade_movie.text = movie.vote_average
-        img_movie.loadPoster(movie.poster_path)
-        img_backdrop.loadBackdrop(movie.backdrop_path)
+        binding.tvMovieTitle.text = movie.title
+        binding.tvMovieOverview.text = movie.overview
+        binding.gradeMovie.text = movie.vote_average
+        binding.imgMovie.loadPoster(movie.poster_path)
+        binding.imgBackdrop.loadBackdrop(movie.backdrop_path)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        binding.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             title = if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 movie.title
             } else {

@@ -8,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kisaa.www.moviecataloguejetpack.R
 import com.kisaa.www.moviecataloguejetpack.core.data.Resource
 import com.kisaa.www.moviecataloguejetpack.core.ui.MovieAdapter
 import com.kisaa.www.moviecataloguejetpack.core.utils.invisible
 import com.kisaa.www.moviecataloguejetpack.core.utils.visible
-import kotlinx.android.synthetic.main.movie_fragment.*
+import com.kisaa.www.moviecataloguejetpack.databinding.MovieFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -22,12 +21,15 @@ class MovieFragment : Fragment() {
     private lateinit var movieAdapter: MovieAdapter
 
     private val viewModel by viewModel<MovieViewModel>()
+    private var _binding: MovieFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.movie_fragment, container, false)
+    ): View {
+        _binding = MovieFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -53,20 +55,25 @@ class MovieFragment : Fragment() {
             }
         })
 
-        with(rv_movie) {
+        with(binding.rvMovie) {
             layoutManager = LinearLayoutManager(context)
             adapter = movieAdapter
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun showLoading() {
-        progress_bar.visible()
-        rv_movie.invisible()
+        binding.progressBar.visible()
+        binding.rvMovie.invisible()
     }
 
     private fun hideLoading() {
-        progress_bar.invisible()
-        rv_movie.visible()
+        binding.progressBar.invisible()
+        binding.rvMovie.visible()
     }
 
 }

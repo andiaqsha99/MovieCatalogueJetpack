@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kisaa.www.moviecataloguejetpack.core.R
+import com.kisaa.www.moviecataloguejetpack.core.databinding.ItemListBinding
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
 import com.kisaa.www.moviecataloguejetpack.core.utils.loadPoster
-import kotlinx.android.synthetic.main.item_list.view.*
 
 class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
@@ -22,13 +22,14 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>
     }
 
     inner class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemListBinding.bind(itemView)
         fun bind(favorite: Favorite) {
-            with(itemView) {
-                txt_title.text = favorite.title
-                txt_description.text = favorite.overview
-                txt_grade.text = favorite.voteAverage
-                img_photo.loadPoster(favorite.posterPath)
-                setOnClickListener {
+            with(binding) {
+                txtTitle.text = favorite.title
+                txtDescription.text = favorite.overview
+                txtGrade.text = favorite.voteAverage
+                imgPhoto.loadPoster(favorite.posterPath)
+                root.setOnClickListener {
                     onItemClick?.invoke(favorites[adapterPosition])
                 }
             }

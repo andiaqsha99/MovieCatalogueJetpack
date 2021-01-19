@@ -2,15 +2,17 @@ package com.kisaa.www.moviecatalogue.favorite.favorite
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.kisaa.www.moviecatalogue.favorite.R
-import kotlinx.android.synthetic.main.activity_favorite.*
+import com.kisaa.www.moviecatalogue.favorite.databinding.ActivityFavoriteBinding
 import org.koin.core.context.loadKoinModules
 
 class FavoriteActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityFavoriteBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_favorite)
+        binding = ActivityFavoriteBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         loadKoinModules(favoriteModule)
 
         supportActionBar?.apply {
@@ -20,8 +22,8 @@ class FavoriteActivity : AppCompatActivity() {
         }
 
         val pagerAdapter = FavoritePagerAdapter(this, supportFragmentManager)
-        view_pager_fav.adapter = pagerAdapter
-        tabLayout.setupWithViewPager(view_pager_fav)
+        binding.viewPagerFav.adapter = pagerAdapter
+        binding.tabLayout.setupWithViewPager(binding.viewPagerFav)
     }
 
     override fun onSupportNavigateUp(): Boolean {

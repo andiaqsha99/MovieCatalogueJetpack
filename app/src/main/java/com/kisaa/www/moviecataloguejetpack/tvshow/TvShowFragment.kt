@@ -7,12 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kisaa.www.moviecataloguejetpack.R
 import com.kisaa.www.moviecataloguejetpack.core.data.Resource
 import com.kisaa.www.moviecataloguejetpack.core.ui.TvShowAdapter
 import com.kisaa.www.moviecataloguejetpack.core.utils.invisible
 import com.kisaa.www.moviecataloguejetpack.core.utils.visible
-import kotlinx.android.synthetic.main.tv_show_fragment.*
+import com.kisaa.www.moviecataloguejetpack.databinding.TvShowFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -21,12 +20,15 @@ class TvShowFragment : Fragment() {
     private lateinit var tvShowAdapter: TvShowAdapter
 
     private val viewModel by viewModel<TvShowViewModel>()
+    private var _binding: TvShowFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.tv_show_fragment, container, false)
+        _binding = TvShowFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -54,19 +56,24 @@ class TvShowFragment : Fragment() {
 
         })
 
-        with(rv_tvShow) {
+        with(binding.rvTvShow) {
             layoutManager = LinearLayoutManager(context)
             adapter = tvShowAdapter
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun showLoading() {
-        progress_bar.visible()
-        rv_tvShow.invisible()
+        binding.progressBar.visible()
+        binding.rvTvShow.invisible()
     }
 
     private fun hideLoading() {
-        progress_bar.invisible()
-        rv_tvShow.visible()
+        binding.progressBar.invisible()
+        binding.rvTvShow.visible()
     }
 }
