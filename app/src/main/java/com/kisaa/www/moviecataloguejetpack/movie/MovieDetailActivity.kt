@@ -24,10 +24,6 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMovieDetailBinding
     private val args: MovieDetailActivityArgs by navArgs()
 
-    companion object {
-        const val EXTRA_DATA = "extra_data"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieDetailBinding.inflate(layoutInflater)

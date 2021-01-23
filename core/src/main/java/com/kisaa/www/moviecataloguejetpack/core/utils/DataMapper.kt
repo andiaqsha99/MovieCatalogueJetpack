@@ -97,24 +97,4 @@ object DataMapper {
             category = input.category
         )
 
-    fun favoriteToMovie(input: Favorite): Movie =
-        Movie(
-            id = input.id,
-            title = input.title,
-            overview = input.overview,
-            backdrop_path = input.backdropPath,
-            poster_path = input.posterPath,
-            vote_average = input.voteAverage
-        )
-
-    fun favoriteToTvShow(input: Favorite): TvShow =
-        TvShow(
-            id = input.id,
-            name = input.title,
-            overview = input.overview,
-            backdrop_path = input.backdropPath,
-            poster_path = input.posterPath,
-            vote_average = input.voteAverage
-        )
-
 }

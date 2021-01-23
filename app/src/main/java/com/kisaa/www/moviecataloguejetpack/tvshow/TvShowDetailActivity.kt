@@ -24,10 +24,6 @@ class TvShowDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTvShowDetailBinding
     private val args: TvShowDetailActivityArgs by navArgs()
 
-    companion object {
-        const val EXTRA_DATA = "extra_data"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTvShowDetailBinding.inflate(layoutInflater)
