@@ -2,7 +2,9 @@ package com.kisaa.www.moviecatalogue.favorite.favorite
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayoutMediator
 import com.kisaa.www.moviecatalogue.favorite.databinding.ActivityFavoriteBinding
+import com.kisaa.www.moviecataloguejetpack.core.R
 import org.koin.core.context.loadKoinModules
 
 class FavoriteActivity : AppCompatActivity() {
@@ -21,9 +23,14 @@ class FavoriteActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val pagerAdapter = FavoritePagerAdapter(this, supportFragmentManager)
+        val pagerAdapter = FavoritePagerAdapter(supportFragmentManager, lifecycle)
         binding.viewPagerFav.adapter = pagerAdapter
-        binding.tabLayout.setupWithViewPager(binding.viewPagerFav)
+        TabLayoutMediator(binding.tabLayout, binding.viewPagerFav) { tab, position ->
+            when (position) {
+                0 -> tab.text = resources.getString(R.string.movie_title)
+                else -> tab.text = resources.getString(R.string.tv_show_title)
+            }
+        }.attach()
     }
 
     override fun onSupportNavigateUp(): Boolean {

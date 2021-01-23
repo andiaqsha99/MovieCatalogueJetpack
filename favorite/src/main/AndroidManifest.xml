@@ -9,18 +9,25 @@
         <dist:delivery>
             <dist:install-time />
         </dist:delivery>
+
         <dist:fusing dist:include="true" />
     </dist:module>
 
     <application>
+        <activity
+            android:name=".favorite.FavoriteDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".favorite.FavoriteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data
                     android:host="favorite"
                     android:scheme="moviecatalogue" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

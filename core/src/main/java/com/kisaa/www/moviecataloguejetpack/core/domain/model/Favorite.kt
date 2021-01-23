@@ -1,5 +1,9 @@
 package com.kisaa.www.moviecataloguejetpack.core.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 class Favorite(
     val id: String,
     val title: String,
@@ -8,4 +12,4 @@ class Favorite(
     val posterPath: String?,
     val backdropPath: String?,
     val category: String
-)
+) : Parcelable

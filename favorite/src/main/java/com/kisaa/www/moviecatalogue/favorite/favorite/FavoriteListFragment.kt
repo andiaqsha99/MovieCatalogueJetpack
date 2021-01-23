@@ -1,20 +1,16 @@
 package com.kisaa.www.moviecatalogue.favorite.favorite
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kisaa.www.moviecatalogue.favorite.databinding.FragmentMovieFavoriteBinding
 import com.kisaa.www.moviecataloguejetpack.core.ui.FavoriteAdapter
-import com.kisaa.www.moviecataloguejetpack.core.utils.DataMapper
 import com.kisaa.www.moviecataloguejetpack.core.utils.invisible
 import com.kisaa.www.moviecataloguejetpack.core.utils.visible
-import com.kisaa.www.moviecataloguejetpack.movie.MovieDetailActivity
-import com.kisaa.www.moviecataloguejetpack.tvshow.TvShowDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -37,7 +33,7 @@ class FavoriteListFragment : Fragment() {
     private lateinit var favAdapter: FavoriteAdapter
     private var _binding: FragmentMovieFavoriteBinding? = null
     private val binding get() = _binding!!
-    private lateinit var category: String
+    private var category: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,16 +43,13 @@ class FavoriteListFragment : Fragment() {
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        arguments?.getString(EXTRA_CATEGORY)?.let {
-            category = it
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         favAdapter = FavoriteAdapter()
+
+        arguments?.takeIf { it.containsKey(EXTRA_CATEGORY) }?.apply {
+            category = getString(EXTRA_CATEGORY)
+        }
 
         if (category == "movie") {
             viewModel.listMovies.observe(viewLifecycleOwner, {
@@ -67,15 +60,6 @@ class FavoriteListFragment : Fragment() {
                     favAdapter.setData(it)
                 }
             })
-
-            favAdapter.onItemClick = { selectedData ->
-                val intent = Intent(activity, MovieDetailActivity::class.java)
-                intent.putExtra(
-                    MovieDetailActivity.EXTRA_DATA,
-                    DataMapper.favoriteToMovie(selectedData)
-                )
-                startActivity(intent)
-            }
         } else {
             viewModel.listTvShows.observe(viewLifecycleOwner, {
                 if (it.isNullOrEmpty()) {
@@ -85,15 +69,14 @@ class FavoriteListFragment : Fragment() {
                     favAdapter.setData(it)
                 }
             })
+        }
 
-            favAdapter.onItemClick = { selectedData ->
-                val intent = Intent(activity, TvShowDetailActivity::class.java)
-                intent.putExtra(
-                    TvShowDetailActivity.EXTRA_DATA,
-                    DataMapper.favoriteToTvShow(selectedData)
+        favAdapter.onItemClick = { selectedData ->
+            val toDetailFavorite =
+                FavoriteListFragmentDirections.actionFavoriteListFragmentToFavoriteDetailActivity(
+                    selectedData
                 )
-                startActivity(intent)
-            }
+            findNavController().navigate(toDetailFavorite)
         }
 
         with(binding.rvMovieFav) {

@@ -1,12 +1,12 @@
 package com.kisaa.www.moviecataloguejetpack.movie
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kisaa.www.moviecataloguejetpack.core.data.Resource
 import com.kisaa.www.moviecataloguejetpack.core.ui.MovieAdapter
@@ -32,13 +32,13 @@ class MovieFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         movieAdapter = MovieAdapter()
         movieAdapter.onItemClick = { selectedItem ->
-            val intent = Intent(activity, MovieDetailActivity::class.java)
-            intent.putExtra(MovieDetailActivity.EXTRA_DATA, selectedItem)
-            startActivity(intent)
+            val toDetailMovie =
+                MovieFragmentDirections.actionMovieFragmentToMovieDetailActivity(selectedItem)
+            findNavController().navigate(toDetailMovie)
         }
 
         viewModel.listMovies.observe(viewLifecycleOwner, {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/navigation_movie">
+
+    <activity
+        android:id="@+id/movieDetailActivity"
+        android:name="com.kisaa.www.moviecataloguejetpack.movie.MovieDetailActivity"
+        android:label="activity_movie_detail"
+        tools:layout="@layout/activity_movie_detail">
+        <argument
+            android:name="movie_item"
+            app:argType="com.kisaa.www.moviecataloguejetpack.core.domain.model.Movie" />
+    </activity>
+    <activity
+        android:id="@+id/tvShowDetailActivity"
+        android:name="com.kisaa.www.moviecataloguejetpack.tvshow.TvShowDetailActivity"
+        android:label="activity_tv_show_detail"
+        tools:layout="@layout/activity_tv_show_detail">
+        <argument
+            android:name="tvshow_item"
+            app:argType="com.kisaa.www.moviecataloguejetpack.core.domain.model.TvShow" />
+    </activity>
+    <fragment
+        android:id="@+id/navigation_movie"
+        android:name="com.kisaa.www.moviecataloguejetpack.movie.MovieFragment"
+        android:label="@string/movie_title"
+        tools:layout="@layout/movie_fragment">
+        <action
+            android:id="@+id/action_movieFragment_to_movieDetailActivity"
+            app:destination="@id/movieDetailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_tv_show"
+        android:name="com.kisaa.www.moviecataloguejetpack.tvshow.TvShowFragment"
+        android:label="@string/tv_show_title"
+        tools:layout="@layout/tv_show_fragment">
+        <action
+            android:id="@+id/action_tvShowFragment_to_tvShowDetailActivity"
+            app:destination="@id/tvShowDetailActivity" />
+    </fragment>
+
+</navigation>

@@ -1,11 +1,11 @@
 package com.kisaa.www.moviecataloguejetpack.tvshow
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kisaa.www.moviecataloguejetpack.core.data.Resource
 import com.kisaa.www.moviecataloguejetpack.core.ui.TvShowAdapter
@@ -26,18 +26,18 @@ class TvShowFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = TvShowFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         tvShowAdapter = TvShowAdapter()
         tvShowAdapter.onItemClick = { selectedData ->
-            val intent = Intent(activity, TvShowDetailActivity::class.java)
-            intent.putExtra(TvShowDetailActivity.EXTRA_DATA, selectedData)
-            startActivity(intent)
+            val toDetailTvShow =
+                TvShowFragmentDirections.actionTvShowFragmentToTvShowDetailActivity(selectedData)
+            findNavController().navigate(toDetailTvShow)
         }
 
         viewModel.listTvShow.observe(viewLifecycleOwner, {

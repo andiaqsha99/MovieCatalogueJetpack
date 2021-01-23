@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.kisaa.www.moviecataloguejetpack.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,9 +22,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.elevation = 0f
 
-        val pagerAdapter = ViewPagerAdapter(this, supportFragmentManager)
-        binding.viewPager.adapter = pagerAdapter
-        binding.tabs.setupWithViewPager(binding.viewPager)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        val appBarConfiguration = AppBarConfiguration.Builder(
+            R.id.navigation_movie, R.id.navigation_tv_show
+        ).build()
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.bottomNav.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

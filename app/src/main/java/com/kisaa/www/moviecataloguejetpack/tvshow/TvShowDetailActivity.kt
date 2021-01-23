@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.navigation.navArgs
 import com.google.android.material.appbar.AppBarLayout
 import com.kisaa.www.moviecataloguejetpack.R
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
@@ -21,6 +22,7 @@ class TvShowDetailActivity : AppCompatActivity() {
     private var menuItem: Menu? = null
     private lateinit var favorite: Favorite
     private lateinit var binding: ActivityTvShowDetailBinding
+    private val args: TvShowDetailActivityArgs by navArgs()
 
     companion object {
         const val EXTRA_DATA = "extra_data"
@@ -32,10 +34,10 @@ class TvShowDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        val tvShow = intent.getParcelableExtra<TvShow>(EXTRA_DATA)
+        val tvShow = args.tvshowItem
 
         binding.detailProgressBar.visible()
-        tvShow?.let {
+        tvShow.let {
             viewModel.checkFavoriteById(tvShow.id).observe(this, { data ->
                 isFavorite = data != null
             })

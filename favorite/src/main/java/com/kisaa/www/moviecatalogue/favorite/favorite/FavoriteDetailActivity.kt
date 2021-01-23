@@ -1,4 +1,4 @@
-package com.kisaa.www.moviecataloguejetpack.movie
+package com.kisaa.www.moviecatalogue.favorite.favorite
 
 import android.os.Bundle
 import android.view.Menu
@@ -7,43 +7,37 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.navArgs
 import com.google.android.material.appbar.AppBarLayout
+import com.kisaa.www.moviecatalogue.favorite.databinding.ActivityFavoriteDetailBinding
 import com.kisaa.www.moviecataloguejetpack.R
 import com.kisaa.www.moviecataloguejetpack.core.domain.model.Favorite
-import com.kisaa.www.moviecataloguejetpack.core.domain.model.Movie
 import com.kisaa.www.moviecataloguejetpack.core.utils.*
-import com.kisaa.www.moviecataloguejetpack.databinding.ActivityMovieDetailBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
-class MovieDetailActivity : AppCompatActivity() {
+class FavoriteDetailActivity : AppCompatActivity() {
 
-    private val viewModel by viewModel<MovieDetailViewModel>()
+    private val viewModel by viewModel<FavoriteViewModel>()
     private var isFavorite: Boolean = false
     private var menuItem: Menu? = null
     private lateinit var favorite: Favorite
-    private lateinit var binding: ActivityMovieDetailBinding
-    private val args: MovieDetailActivityArgs by navArgs()
-
-    companion object {
-        const val EXTRA_DATA = "extra_data"
-    }
+    private lateinit var binding: ActivityFavoriteDetailBinding
+    private val args: FavoriteDetailActivityArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMovieDetailBinding.inflate(layoutInflater)
+        binding = ActivityFavoriteDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        val movie = args.movieItem
+        favorite = args.itemFavorite
 
         binding.detailProgressBar.visible()
-        movie.let {
-            viewModel.checkFavoriteById(movie.id).observe(this, { data ->
+        favorite.let {
+            viewModel.checkFavoriteById(it.id).observe(this, { data ->
                 isFavorite = data != null
             })
 
-            populateView(movie)
-            movieToFavorite(movie)
+            populateView()
             binding.detailProgressBar.invisible()
         }
     }
@@ -53,16 +47,16 @@ class MovieDetailActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    private fun populateView(movie: Movie) {
-        binding.tvMovieTitle.text = movie.title
-        binding.tvMovieOverview.text = movie.overview
-        binding.gradeMovie.text = movie.vote_average
-        binding.imgMovie.loadPoster(movie.poster_path)
-        binding.imgBackdrop.loadBackdrop(movie.backdrop_path)
+    private fun populateView() {
+        binding.tvFavoriteTitle.text = favorite.title
+        binding.tvFavoriteOverview.text = favorite.overview
+        binding.grade.text = favorite.voteAverage
+        binding.imgFavorite.loadPoster(favorite.posterPath)
+        binding.imgBackdrop.loadBackdrop(favorite.backdropPath)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             title = if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
-                movie.title
+                favorite.title
             } else {
                 null
             }
@@ -102,17 +96,5 @@ class MovieDetailActivity : AppCompatActivity() {
             menuItem?.getItem(0)?.icon =
                 ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_white_24dp)
         }
-    }
-
-    private fun movieToFavorite(movie: Movie) {
-        favorite = Favorite(
-            movie.id,
-            movie.title,
-            movie.overview,
-            movie.vote_average,
-            movie.poster_path,
-            movie.backdrop_path,
-            "movie"
-        )
     }
 }
