@@ -25,6 +25,7 @@ buildscript {
 
     ext.koin_version = "2.1.6"
     ext.nav_version = "2.3.2"
+    ext.leak_canary_version = "2.4"
 
     repositories {
         google()

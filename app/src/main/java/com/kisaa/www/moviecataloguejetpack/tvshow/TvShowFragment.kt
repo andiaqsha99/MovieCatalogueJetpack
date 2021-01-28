@@ -64,6 +64,7 @@ class TvShowFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.rvTvShow.adapter = null
         _binding = null
     }
 
