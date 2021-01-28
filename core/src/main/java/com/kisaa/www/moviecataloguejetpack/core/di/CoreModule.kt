@@ -8,6 +8,7 @@ import com.kisaa.www.moviecataloguejetpack.core.data.source.local.room.FavoriteD
 import com.kisaa.www.moviecataloguejetpack.core.data.source.remote.RemoteDataSource
 import com.kisaa.www.moviecataloguejetpack.core.data.source.remote.network.ApiService
 import com.kisaa.www.moviecataloguejetpack.core.domain.repository.IMovieRepository
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -28,10 +29,15 @@ val databaseModule = module {
 
 val networkModule = module {
     single {
+        val hostname = "themoviedb.org"
+        val certificatePinner = CertificatePinner.Builder()
+            .add(hostname, "sha256/+vqZVAzTqUP8BGkfl88yU7SQ3C8J2uNEa55B7RZjEg0=")
+            .build()
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
+            .certificatePinner(certificatePinner)
             .build()
     }
 
