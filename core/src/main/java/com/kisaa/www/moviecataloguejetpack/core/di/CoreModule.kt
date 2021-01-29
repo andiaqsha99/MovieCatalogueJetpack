@@ -8,6 +8,8 @@ import com.kisaa.www.moviecataloguejetpack.core.data.source.local.room.FavoriteD
 import com.kisaa.www.moviecataloguejetpack.core.data.source.remote.RemoteDataSource
 import com.kisaa.www.moviecataloguejetpack.core.data.source.remote.network.ApiService
 import com.kisaa.www.moviecataloguejetpack.core.domain.repository.IMovieRepository
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,7 +24,10 @@ val databaseModule = module {
     factory { get<FavoriteDatabase>().movieDao() }
     factory { get<FavoriteDatabase>().tvShowDao() }
     single {
+        val passphrase: ByteArray = SQLiteDatabase.getBytes("movie_catalogue".toCharArray())
+        val factory = SupportFactory(passphrase)
         Room.databaseBuilder(androidApplication(), FavoriteDatabase::class.java, "Favorite_db")
+            .openHelperFactory(factory)
             .build()
     }
 }
