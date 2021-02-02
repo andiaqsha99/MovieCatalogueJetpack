@@ -29,18 +29,18 @@ class FavoriteListFragment : Fragment() {
         }
     }
 
-    private val viewModel by viewModel<FavoriteViewModel>()
+    private val viewModel: FavoriteViewModel by viewModel()
     private lateinit var favAdapter: FavoriteAdapter
     private var _binding: FragmentMovieFavoriteBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
     private var category: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentMovieFavoriteBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,25 +79,25 @@ class FavoriteListFragment : Fragment() {
             findNavController().navigate(toDetailFavorite)
         }
 
-        with(binding.rvMovieFav) {
-            layoutManager = LinearLayoutManager(context)
-            this.adapter = favAdapter
+        with(binding?.rvMovieFav) {
+            this?.layoutManager = LinearLayoutManager(context)
+            this?.adapter = favAdapter
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.rvMovieFav.adapter = null
+        binding?.rvMovieFav?.adapter = null
         _binding = null
     }
 
     private fun showFavorite() {
-        binding.tvNoFavorite.invisible()
-        binding.rvMovieFav.visible()
+        binding?.tvNoFavorite?.invisible()
+        binding?.rvMovieFav?.visible()
     }
 
     private fun showEmptyFavorite() {
-        binding.tvNoFavorite.visible()
-        binding.rvMovieFav.invisible()
+        binding?.tvNoFavorite?.visible()
+        binding?.rvMovieFav?.invisible()
     }
 }

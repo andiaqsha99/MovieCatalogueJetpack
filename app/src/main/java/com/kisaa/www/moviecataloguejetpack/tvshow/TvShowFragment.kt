@@ -21,14 +21,14 @@ class TvShowFragment : Fragment() {
 
     private val viewModel by viewModel<TvShowViewModel>()
     private var _binding: TvShowFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = TvShowFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,25 +56,25 @@ class TvShowFragment : Fragment() {
 
         })
 
-        with(binding.rvTvShow) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = tvShowAdapter
+        with(binding?.rvTvShow) {
+            this?.layoutManager = LinearLayoutManager(context)
+            this?.adapter = tvShowAdapter
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.rvTvShow.adapter = null
+        binding?.rvTvShow?.adapter = null
         _binding = null
     }
 
     private fun showLoading() {
-        binding.progressBar.visible()
-        binding.rvTvShow.invisible()
+        binding?.progressBar?.visible()
+        binding?.rvTvShow?.invisible()
     }
 
     private fun hideLoading() {
-        binding.progressBar.invisible()
-        binding.rvTvShow.visible()
+        binding?.progressBar?.invisible()
+        binding?.rvTvShow?.visible()
     }
 }

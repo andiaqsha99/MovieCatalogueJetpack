@@ -22,14 +22,14 @@ class MovieFragment : Fragment() {
 
     private val viewModel by viewModel<MovieViewModel>()
     private var _binding: MovieFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = MovieFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,26 +55,26 @@ class MovieFragment : Fragment() {
             }
         })
 
-        with(binding.rvMovie) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = movieAdapter
+        with(binding?.rvMovie) {
+            this?.layoutManager = LinearLayoutManager(context)
+            this?.adapter = movieAdapter
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.rvMovie.adapter = null
+        binding?.rvMovie?.adapter = null
         _binding = null
     }
 
     private fun showLoading() {
-        binding.progressBar.visible()
-        binding.rvMovie.invisible()
+        binding?.progressBar?.visible()
+        binding?.rvMovie?.invisible()
     }
 
     private fun hideLoading() {
-        binding.progressBar.invisible()
-        binding.rvMovie.visible()
+        binding?.progressBar?.invisible()
+        binding?.rvMovie?.visible()
     }
 
 }
